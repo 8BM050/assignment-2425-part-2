@@ -317,6 +317,13 @@ def load_patient(patient_file):
     if compartment not in flow_data.keys():
       raise ValueError(f"Blood flow for compartment {compartment} not found.")
     blood_flow.append(flow_data[compartment])
+
+  # normalize blood flow fractions
+  sum_fractional_flow = sum(blood_flow[1:])
+  if sum_fractional_flow != 1:
+    print("Fractional blood flow inputs do not sum to 1. Normalizing the fractional flows so they sum to 1")
+    for i in range(1,len(blood_flow)):
+      blood_flow[i] /= sum_fractional_flow
   
   # parse partitions
   partition_data = patient_data["partition"]
